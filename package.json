@@ -13,7 +13,7 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"./src/**/*.{ts,tsx}\"",
-    "gen:services": "buf generate ./proto/entpb.proto"
+    "gen:services": "buf generate ./node_modules/@m-ishioka/p-protocol-buffuers/entpb/entpb.proto"
   },
   "dependencies": {
     "@bufbuild/connect-web": "^0.6.0",
