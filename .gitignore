@@ -37,3 +37,6 @@ next-env.d.ts
 
 # Optional npm cache directory
 .npm
+
+**/tmp/*/*
+*.log

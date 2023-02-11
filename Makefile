@@ -12,3 +12,7 @@ clean:
 dev:
 	docker-compose down
 	docker-compose up
+
+.PHONY: make-grpc-client
+make-grpc-client:
+	docker-compose run --rm buf npm run gen:services

@@ -1,43 +1,28 @@
 {
-  // 適用する環境
   "env": {
     "es6": true,
-    "es2022": true
+    "es2021": true
   },
-  // パーサー
-  // "parser": "@typescript-eslint/parser",
-  // jsx を使います
   "parserOptions": {
     "ecmaVersion": 13, // 2022
     "ecmaFeatures": {
       "jsx": true
     },
-    // import 文でモジュールを使用します
     "sourceType": "module"
   },
-  // React のバージョンは自動検出に
   "settings": {
     "react": {
       "version": "detect"
     }
   },
   "plugins": ["import", "unused-imports"],
-  // 基本的にルールは recommended に従う
-  // prettier は配列の最後尾に書く
   "extends": [
     "next/core-web-vitals",
     "eslint:recommended",
-    // story book
-    "plugin:storybook/recommended",
-    // import
     "plugin:import/recommended",
     "plugin:import/typescript"
-    // "plugin:@typescript-eslint/eslint-recommended",
-    // "plugin:@typescript-eslint/recommended",
-    // "prettier"
   ],
   "rules": {
-    // TypeScirpt なので prop-types は要らない
     "react/display-name": "off",
     "react/prop-types": "off",
     "semi": ["error", "never", { "beforeStatementContinuationChars": "never" }],
@@ -52,8 +37,7 @@
     "no-duplicate-case": "off",
     "no-useless-escape": "warn",
     "@typescript-eslint/no-unused-vars": "off",
-    "unused-imports/no-unused-imports-ts": "warn",
-    // import 順序
+    "unused-imports/no-unused-imports": "error",
     "import/order": [
       "warn",
       {
@@ -67,9 +51,9 @@
           "object",
           "type"
         ],
-        "newlines-between": "always", // import groups の間 1行あける
+        "newlines-between": "always",
         "pathGroupsExcludedImportTypes": ["builtin"],
-        "alphabetize": { "order": "asc", "caseInsensitive": true }, // 大文字小文字関係なくアルファベット順にしたい
+        "alphabetize": { "order": "asc", "caseInsensitive": true },
         "pathGroups": [
           {
             "pattern": "src/types/**",
@@ -84,7 +68,6 @@
         ]
       }
     ],
-    "import/resolver": 0,
-    "no-unused-vars": "off"
+    "import/resolver": 0
   }
 }
