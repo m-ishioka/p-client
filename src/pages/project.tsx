@@ -1,43 +1,78 @@
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
-
-import Container from '../components/Container'
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
-import { PROJECT_LIST, PROJECT_TREE_MAP } from '@constants/project'
+import dayjs from 'dayjs'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { Treemap } from 'recharts'
 
+import { Project, ProcessType } from '@api/services/entpb_pb'
+import { PROJECT_TREE_MAP } from '@constants/project'
+import { useProcessType } from '@hooks/useProcessType'
+import { useProject } from '@hooks/useProject'
+
+import Container from '../components/Container'
+
+export type OutOfMessage<
+  T extends {
+    [x: string]: any
+  }
+> = Omit<
+  T,
+  | 'equals'
+  | 'equals'
+  | 'clone'
+  | 'fromBinary'
+  | 'fromJson'
+  | 'fromJsonString'
+  | 'toBinary'
+  | 'toJson'
+  | 'toJsonString'
+  | 'toJSON'
+  | 'getType'
+>
+
 function ListCard({
-  id,
+  IDKey,
   name,
-  start_at,
-  end_at,
-  team_size,
+  startDate,
+  endDate,
   role,
-  language,
-  db,
-  os,
-  mw,
-  process,
-  work,
-  skill,
-  content,
-}: typeof PROJECT_LIST[number]) {
+  scale,
+  description,
+  skills,
+  processTypes,
+  processTypeList,
+}: OutOfMessage<Project> & {
+  processTypeList: OutOfMessage<ProcessType>[]
+}) {
   const processResult = useMemo(() => {
+    const includes = processTypes.map(({ id }) => id)
     return (
       <>
-        {process.map((result) => (
-          <TableCell className="border-r text-3xl text-center">
-            {result ? '●' : ''}
+        {processTypeList.map(({ id }, index) => (
+          <TableCell
+            key={index.toString()}
+            className="border-r text-3xl text-center">
+            {includes.includes(id) ? '●' : ''}
           </TableCell>
         ))}
       </>
     )
-  }, [])
+  }, [processTypeList, processTypes])
+
+  const _startDate = useMemo(
+    () => dayjs(startDate?.toJson() as unknown as Date),
+    [startDate]
+  )
+  const _endDate = useMemo(
+    () => dayjs(endDate?.toJson() as unknown as Date),
+    [endDate]
+  )
   return (
     <Card
-      id={id}
+      id={IDKey}
       className="w-full mb-10 dark:bg-transparent dark:border-white dark:border dark:shadow-none dark:text-gray-200">
       <CardContent className="m-5 w-100">
         <div className="flex items-center mt-3">
@@ -53,16 +88,16 @@ function ListCard({
                 期間
               </TableCell>
               <TableCell colSpan={8}>
-                {`${start_at?.format('YYYY年MM月')} ~ ${end_at?.format(
+                {`${_startDate.format('YYYY年MM月')} ~ ${_endDate?.format(
                   'YYYY年MM月'
-                )} （${end_at?.diff(start_at, 'month')}ヶ月）`}
+                )} （${_endDate?.diff(_startDate, 'month')}ヶ月）`}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell rowSpan={2} className="border-r font-bold" colSpan={2}>
                 役割 / 規模
               </TableCell>
-              <TableCell colSpan={8}>{`${team_size}名`}</TableCell>
+              <TableCell colSpan={8}>{`${scale}名`}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell colSpan={8}>{role}</TableCell>
@@ -71,25 +106,57 @@ function ListCard({
               <TableCell className="border-r font-bold" colSpan={2}>
                 使用言語
               </TableCell>
-              <TableCell colSpan={8}>{language?.join(' ,  ')}</TableCell>
+              <TableCell colSpan={8}>
+                {skills
+                  .filter(
+                    ({ skillType }) =>
+                      ((skillType?.id.toString() ?? '0') as unknown) === '1'
+                  )
+                  .map(({ name }) => name)
+                  ?.join(' ,  ')}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="border-r font-bold" colSpan={2}>
                 DB
               </TableCell>
-              <TableCell colSpan={8}>{db?.join(' ,  ')}</TableCell>
+              <TableCell colSpan={8}>
+                {skills
+                  .filter(
+                    ({ skillType }) =>
+                      ((skillType?.id.toString() ?? '0') as unknown) === '2'
+                  )
+                  .map(({ name }) => name)
+                  ?.join(' ,  ')}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="border-r font-bold" colSpan={2}>
                 サーバーOS
               </TableCell>
-              <TableCell colSpan={8}>{os?.join(' ,  ')}</TableCell>
+              <TableCell colSpan={8}>
+                {skills
+                  .filter(
+                    ({ skillType }) =>
+                      ((skillType?.id.toString() ?? '0') as unknown) === '3'
+                  )
+                  .map(({ name }) => name)
+                  ?.join(' ,  ')}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="border-r font-bold" colSpan={2}>
                 FW・MW ツール 等
               </TableCell>
-              <TableCell colSpan={8}>{mw?.join(' ,  ')}</TableCell>
+              <TableCell colSpan={8}>
+                {skills
+                  .filter(
+                    ({ skillType }) =>
+                      ((skillType?.id.toString() ?? '0') as unknown) === '4'
+                  )
+                  .map(({ name }) => name)
+                  ?.join(' ,  ')}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -101,25 +168,24 @@ function ListCard({
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className="border-r text-center">要件定義</TableCell>
-              <TableCell className="border-r text-center">基本設計</TableCell>
-              <TableCell className="border-r text-center">詳細設計</TableCell>
-              <TableCell className="border-r text-center">実装・単体</TableCell>
-              <TableCell className="border-r text-center">統合テスト</TableCell>
-              <TableCell className="border-r text-center">総合テスト</TableCell>
-              <TableCell className="border-r text-center">保守・運用</TableCell>
+              {processTypeList.map(({ name }, index) => (
+                <TableCell
+                  key={index.toString()}
+                  className="border-r text-center">
+                  {name}
+                </TableCell>
+              ))}
             </TableRow>
             <TableRow>{processResult}</TableRow>
           </TableHead>
         </Table>
         <div>
           <dl>
-            <dt className="text-l font-bold mb-2 mt-4">担当業務</dt>
-            <dd>{work}</dd>
-            <dt className="text-l font-bold mb-2 mt-4">習得スキル</dt>
-            <dd>{skill}</dd>
-            <dt className="text-l font-bold mb-2 mt-4">コメント</dt>
-            <dd>{content}</dd>
+            <div className="markdown-body p-5">
+              <ReactMarkdown unwrapDisallowed={true}>
+                {Buffer.from(description).toString()}
+              </ReactMarkdown>
+            </div>
           </dl>
         </div>
       </CardContent>
@@ -127,7 +193,7 @@ function ListCard({
   )
 }
 
-const useResizeObserver = (elements, callback) => {
+const useResizeObserver = (elements: any, callback: any) => {
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       callback(entries)
@@ -141,22 +207,35 @@ const useResizeObserver = (elements, callback) => {
   }, [])
 }
 
-export default function Project() {
+export default function _Project() {
+  const { processTypeList, fetchProcessTypeList } = useProcessType()
+  const { projectList, fetchProjectList } = useProject()
+  useEffect(() => {
+    fetchProcessTypeList()
+    fetchProjectList()
+  }, [])
+
   const list = useMemo(() => {
+    const projectLength = projectList?.length
     const _list = []
-    const projectLength = PROJECT_LIST.length
     for (let index = 0; index < projectLength; index++) {
-      const project = PROJECT_LIST[index]
-      _list.push(<ListCard {...project} />)
+      const project = projectList[index]
+      _list.push(
+        <ListCard
+          key={index.toString()}
+          {...project}
+          processTypeList={processTypeList}
+        />
+      )
     }
 
     return _list
-  }, [])
+  }, [projectList, projectList])
 
   const [width, setWidth] = useState(0)
   const ref = useRef(null)
 
-  const handleResize = (entries) => {
+  const handleResize = (entries: any) => {
     const width = entries[0].contentRect.width
     setWidth(Math.floor(width))
   }
