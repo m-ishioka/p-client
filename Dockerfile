@@ -13,6 +13,7 @@ WORKDIR $APP_HOME
 EXPOSE 3001
 
 COPY package*.json ./
+COPY .npmrc ./
 
 RUN chown -R node:node .
 RUN mkdir $APP_HOME/node_modules
