@@ -1,0 +1,63 @@
+export const DESIGN_LIST = [
+  {
+    id: 'cm',
+    name: 'クラウドモンスター',
+    thumbnail: '/design-1.png',
+    href: 'https://cloudmonster.jp/',
+    hrefName: 'cloudmonster.jp',
+    content: 'toC向けバックアップアプリケーションの説明が入ります。',
+  },
+  {
+    id: 'qe',
+    name: 'Queenファンクラブサイト',
+    thumbnail: '/design-2.png',
+    content: 'Queenファンクラブサイトの説明が入ります。',
+  },
+  {
+    id: 'cs',
+    name: 'Chilsche | リユース子供服専門の寄付・販売コミュニティプレイス',
+    thumbnail: '/design-3.png',
+    href: 'https://www.chilsche.com/',
+    hrefName: 'chilsche.com',
+    content:
+      'リユース子供服専門の寄付・販売コミュニティプレイスの説明が入ります。',
+  },
+  {
+    id: 'sm',
+    name: '日本相撲協会公式サイト',
+    thumbnail: '/design-4.png',
+    href: 'https://www.sumo.or.jp/',
+    hrefName: 'sumo.or.jp',
+    content: '日本相撲協会公式サイトの説明が入ります。',
+  },
+  {
+    id: 'tv',
+    name: '観光産業 最新情報 トラベルビジョン',
+    thumbnail: '/design-5.png',
+    href: 'https://www.travelvision.jp/',
+    hrefName: 'travelvision.jp',
+    content: 'トラベルビジョンの説明が入ります。',
+  },
+  {
+    id: 'gr',
+    name: 'ギャラリーレア',
+    thumbnail: '/design-6.png',
+    href: 'https://www.g-rare.com/',
+    hrefName: 'g-rare.com',
+    content: 'ギャラリーレア公式通販サイト',
+  },
+  {
+    id: 'uv',
+    name: 'うららかVRサービスサイト',
+    thumbnail: '/design-7.png',
+    content: 'うららかVRサービスサイト',
+  },
+  {
+    id: 'm3',
+    name: '株式会社M3コーポレートサイト',
+    thumbnail: '/design-8.png',
+    href: 'https://m3-j.co.jp/',
+    hrefName: 'm3-j.co.jp',
+    content: '株式会社M3コーポレートサイト',
+  },
+]
