@@ -9,6 +9,8 @@
     "ssr-build": "next build",
     "development:ssg-build": "APP_ENV=development next build && next export",
     "production:ssg-build": "APP_ENV=production next build && next export",
+    "build:develop": "APP_ENV=development next build",
+    "build:prod": "APP_ENV=development next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
