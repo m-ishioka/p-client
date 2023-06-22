@@ -21,6 +21,8 @@ RUN chown -R node:node $APP_HOME/node_modules
 
 RUN echo "WORKDIR is $WORKDIR . HOME is $HOME . LANG is $LANG ." && npm config list
 
+ARG _NODE_AUTH_TOKEN
+
 
 ###############
 #     dev     #
