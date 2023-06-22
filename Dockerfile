@@ -60,7 +60,7 @@ COPY --from=build /$APP_HOME/.next ./.next
 COPY --from=build /$APP_HOME/next.config.js ./next.config.js
 COPY --from=build /$APP_HOME/public ./public
 
-RUN NODE_AUTH_TOKEN=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 npm ci --only=production \
+RUN NODE_AUTH_TOKEN=${_NODE_AUTH_TOKEN} npm ci --only=production \
     && npm cache clean --force
 
 USER node
