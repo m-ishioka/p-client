@@ -34,7 +34,7 @@ ENV NODE_ENV=development
 FROM dev as test
 ENV NODE_ENV=test
 
-RUN NODE_AUTH_TOKEN=${_NODE_AUTH_TOKEN} npm ci
+RUN NODE_AUTH_TOKEN=${_NODE_AUTH_TOKEN} npm install
 
 
 ###############
@@ -60,7 +60,7 @@ COPY --from=build /$APP_HOME/.next ./.next
 COPY --from=build /$APP_HOME/next.config.js ./next.config.js
 COPY --from=build /$APP_HOME/public ./public
 
-RUN NODE_AUTH_TOKEN=${_NODE_AUTH_TOKEN} npm ci --only=production \
+RUN NODE_AUTH_TOKEN=${_NODE_AUTH_TOKEN} npm install --only=production \
     && npm cache clean --force
 
 USER node
