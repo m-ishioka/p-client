@@ -20,8 +20,6 @@ RUN chown -R node:node $APP_HOME/node_modules
 
 RUN echo "WORKDIR is $WORKDIR . HOME is $HOME . LANG is $LANG ." && npm config list
 
-RUN echo ${_NODE_AUTH_TOKEN}
-
 
 ###############
 #     dev     #
@@ -36,7 +34,7 @@ ENV NODE_ENV=development
 FROM dev as test
 ENV NODE_ENV=test
 
-RUN NODE_AUTH_TOKEN=${_NODE_AUTH_TOKEN} npm install
+RUN npm ci
 
 
 ###############
@@ -62,7 +60,7 @@ COPY --from=build /$APP_HOME/.next ./.next
 COPY --from=build /$APP_HOME/next.config.js ./next.config.js
 COPY --from=build /$APP_HOME/public ./public
 
-RUN NODE_AUTH_TOKEN=${_NODE_AUTH_TOKEN} npm install --only=production \
+RUN npm ci --only=production \
     && npm cache clean --force
 
 USER node
