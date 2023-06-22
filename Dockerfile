@@ -34,7 +34,7 @@ ENV NODE_ENV=development
 FROM dev as test
 ENV NODE_ENV=test
 
-RUN npm ci
+RUN NODE_AUTH_TOKEN=${_NODE_AUTH_TOKEN} npm ci
 
 
 ###############
