@@ -20,7 +20,8 @@ import {
 } from '@api/services/entpb_pb'
 
 const transport = createGrpcWebTransport({
-  baseUrl: 'http://localhost:8080',
+  // baseUrl: 'http://localhost:8080',
+  baseUrl: 'https://p-ishioka.com/api/',
 })
 
 const processTypeClient = createPromiseClient(ProcessTypeService, transport)

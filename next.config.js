@@ -1,12 +1,12 @@
 loadEnv(process.env.APP_ENV)
-require('dotenv').config({ path: `.env.${process.env.ENVIRONMENT}` })
+require('dotenv').config({ path: `./env/env.${process.env.ENVIRONMENT}.js` })
 
 /**
  * @param {string} appEnv
  */
 function loadEnv(appEnv = 'local') {
   const env = {
-    ...require(`./env/env.${appEnv}`),
+    ...require(`./env/env.${appEnv}.js`),
 
     NEXT_PUBLIC_APP_ENV: appEnv,
   }
@@ -47,7 +47,7 @@ const nextConfig = {
   images: {
     domains: ['localhost'],
   },
-  webpack(config, options) {
+  webpack(config) {
     config.resolve.alias = {
       ...config.resolve.alias,
       '@': path.join(__dirname, 'src'),

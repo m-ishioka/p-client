@@ -3,12 +3,26 @@ import Head from 'next/head'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { useTheme } from 'next-themes'
-import { useState, useEffect } from 'react'
+import {
+  useState,
+  useEffect,
+  PropsWithChildren,
+  useMemo,
+  MetaHTMLAttributes,
+  useCallback,
+  ComponentProps,
+} from 'react'
 
-import Footer from '@components/Footer'
-import MobileMenu from '@components/MobileMenu'
+import { Footer } from '@components/Footer'
+import { MobileMenu } from '@components/MobileMenu'
 
-function NavItem({ href, text }: { href: string; text: string }) {
+const NavItem = ({
+  href,
+  text,
+}: {
+  href: ComponentProps<typeof NextLink>['href']
+  text: string
+}) => {
   const router = useRouter()
   const isActive = router.asPath === href
 
@@ -26,22 +40,32 @@ function NavItem({ href, text }: { href: string; text: string }) {
   )
 }
 
-export default function Container(props: any) {
+export const Container = (
+  props: PropsWithChildren<
+    Partial<{
+      image: MetaHTMLAttributes<HTMLMetaElement>['content']
+      date: MetaHTMLAttributes<HTMLMetaElement>['content']
+    }>
+  >
+) => {
+  const router = useRouter()
   const [mounted, setMounted] = useState(false)
   const { resolvedTheme, setTheme } = useTheme()
-
-  // After mounting, we have access to the theme
-  useEffect(() => setMounted(true), [])
-
   const { children, ...customMeta } = props
-  const router = useRouter()
-  const meta = {
-    title: 'Lee Robinson – Developer, writer, creator.',
-    description: `Front-end developer, JavaScript enthusiast, and course creator.`,
-    image: 'https://leerob.io/static/images/lee-banner.png',
-    type: 'website',
-    ...customMeta,
-  }
+  const meta = useMemo(
+    () => ({
+      title: '石岡　正光 – Developer',
+      description: `エンジニア`,
+      type: 'website',
+      ...customMeta,
+    }),
+    [customMeta]
+  )
+  const handleSetTheme = useCallback(
+    () => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark'),
+    [resolvedTheme, setTheme]
+  )
+  useEffect(() => setMounted(true), [])
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900">
@@ -49,19 +73,17 @@ export default function Container(props: any) {
         <title>{meta.title}</title>
         <meta name="robots" content="follow, index" />
         <meta content={meta.description} name="description" />
-        <meta property="og:url" content={`https://leerob.io${router.asPath}`} />
-        <link rel="canonical" href={`https://leerob.io${router.asPath}`} />
+        <meta
+          property="og:url"
+          content={`https://p-ishioka.com${router.asPath}`}
+        />
+        <link rel="canonical" href={`https://p-ishioka.com${router.asPath}`} />
         <meta property="og:type" content={meta.type} />
-        <meta property="og:site_name" content="Lee Robinson" />
+        <meta property="og:site_name" content="石岡　正光" />
         <meta property="og:description" content={meta.description} />
         <meta property="og:title" content={meta.title} />
-        <meta property="og:image" content={meta.image} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@leeerob" />
-        <meta name="twitter:title" content={meta.title} />
-        <meta name="twitter:description" content={meta.description} />
-        <meta name="twitter:image" content={meta.image} />
-        {meta.date && (
+        {meta?.image && <meta property="og:image" content={meta.image} />}
+        {meta?.date && (
           <meta property="article:published_time" content={meta.date} />
         )}
       </Head>
@@ -76,18 +98,12 @@ export default function Container(props: any) {
             <NavItem href="/skill" text="スキル" />
             <NavItem href="/project" text="プロジェクト" />
             <NavItem href="/design" text="デザイン" />
-            {/* <NavItem href="/guestbook" text="Guestbook" />
-            <NavItem href="/dashboard" text="Dashboard" />
-            <NavItem href="/blog" text="Blog" />
-            <NavItem href="/snippets" text="Snippets" /> */}
           </div>
           <button
             aria-label="Toggle Dark Mode"
             type="button"
             className="w-9 h-9 bg-gray-200 rounded-lg dark:bg-gray-600 flex items-center justify-center  hover:ring-2 ring-gray-300  transition-all"
-            onClick={() =>
-              setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
-            }>
+            onClick={handleSetTheme}>
             {mounted && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"

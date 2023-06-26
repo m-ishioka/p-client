@@ -1,13 +1,56 @@
 import cn from 'classnames'
 import Link from 'next/link'
-import { useState, useEffect, SVGProps } from 'react'
+import { useState, useEffect, SVGProps, useCallback } from 'react'
 
 import styles from '../styles/mobile-menu.module.css'
 
-export default function MobileMenu() {
+const MenuIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    className="h-5 w-5 absolute text-gray-900 dark:text-gray-100"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    {...props}>
+    <path
+      d="M2.5 7.5H17.5"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M2.5 12.5H17.5"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
+
+const CrossIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    className="h-5 w-5 absolute text-gray-900 dark:text-gray-100"
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    fill="none"
+    shapeRendering="geometricPrecision"
+    {...props}>
+    <path d="M18 6L6 18" />
+    <path d="M6 6l12 12" />
+  </svg>
+)
+
+export const MobileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  function toggleMenu() {
+  const toggleMenu = useCallback(() => {
     if (isMenuOpen) {
       setIsMenuOpen(false)
       document.body.style.overflow = ''
@@ -15,7 +58,7 @@ export default function MobileMenu() {
       setIsMenuOpen(true)
       document.body.style.overflow = 'hidden'
     }
-  }
+  }, [isMenuOpen])
 
   useEffect(() => {
     return function cleanup() {
@@ -44,107 +87,32 @@ export default function MobileMenu() {
             className="border-b border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 text-sm font-semibold"
             style={{ transitionDelay: '150ms' }}>
             <Link href="/" className="flex w-auto pb-4">
-              Home
+              私について
             </Link>
           </li>
           <li
             className="border-b border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 text-sm font-semibold"
             style={{ transitionDelay: '175ms' }}>
-            <Link href="/guestbook" className="flex w-auto pb-4">
-              Guestbook
+            <Link href="/skill" className="flex w-auto pb-4">
+              スキル
             </Link>
           </li>
           <li
             className="border-b border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 text-sm font-semibold"
             style={{ transitionDelay: '200ms' }}>
-            <Link href="/dashboard" className="flex w-auto pb-4">
-              Dashboard
+            <Link href="/project" className="flex w-auto pb-4">
+              プロジェクト
             </Link>
           </li>
           <li
             className="border-b border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 text-sm font-semibold"
             style={{ transitionDelay: '250ms' }}>
-            <Link href="/blog" className="flex w-auto pb-4">
-              Blog
-            </Link>
-          </li>
-          <li
-            className="border-b border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 text-sm font-semibold"
-            style={{ transitionDelay: '275ms' }}>
-            <Link href="/snippets" className="flex w-auto pb-4">
-              Snippets
-            </Link>
-          </li>
-          <li
-            className="border-b border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 text-sm font-semibold"
-            style={{ transitionDelay: '300ms' }}>
-            <Link href="/newsletter" className="flex w-auto pb-4">
-              Newsletter
-            </Link>
-          </li>
-          <li
-            className="border-b border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 text-sm font-semibold"
-            style={{ transitionDelay: '325ms' }}>
-            <Link href="/tweets" className="flex w-auto pb-4">
-              Tweets
-            </Link>
-          </li>
-          <li
-            className="border-b border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 text-sm font-semibold"
-            style={{ transitionDelay: '350ms' }}>
-            <Link href="/uses" className="flex w-auto pb-4">
-              Uses
+            <Link href="/design" className="flex w-auto pb-4">
+              デザイン
             </Link>
           </li>
         </ul>
       )}
     </>
-  )
-}
-
-function MenuIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      className="h-5 w-5 absolute text-gray-900 dark:text-gray-100"
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
-      fill="none"
-      {...props}>
-      <path
-        d="M2.5 7.5H17.5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M2.5 12.5H17.5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function CrossIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      className="h-5 w-5 absolute text-gray-900 dark:text-gray-100"
-      viewBox="0 0 24 24"
-      width="24"
-      height="24"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="none"
-      shapeRendering="geometricPrecision"
-      {...props}>
-      <path d="M18 6L6 18" />
-      <path d="M6 6l12 12" />
-    </svg>
   )
 }

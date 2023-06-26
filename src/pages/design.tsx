@@ -7,12 +7,11 @@ import {
 } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import Typography from '@mui/material/Typography'
 import { useMemo, useRef, useState } from 'react'
 
 import { DESIGN_LIST } from '@constants/design'
 
-import Container from '../components/Container'
+import { Container } from '../components/Container'
 
 // function SkillCard({
 //   id,
@@ -94,18 +93,11 @@ function DesignCard({
           image={thumbnail}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {name}
-          </Typography>
-          <Typography
-            variant="body2"
-            className="dark:text-gray-200"
-            color="text.secondary">
-            {content}
-          </Typography>
+          <h5 className="font-bold text-md pb-2">{name}</h5>
+          <p className="text-sm dark:text-gray-200">{content}</p>
         </CardContent>
       </CardActionArea>
-      <CardActions className="p-7 pt-3 pb-7">
+      <CardActions className="m-3 mb-4">
         {href && hrefName ? (
           <Button
             className="normal-case"
@@ -117,12 +109,7 @@ function DesignCard({
             {hrefName}
           </Button>
         ) : (
-          <Typography
-            variant="body2"
-            className="dark:text-gray-200"
-            color="text.secondary">
-            現在は公開していません。
-          </Typography>
+          <p className="text-sm dark:text-gray-200">現在は公開していません。</p>
         )}
       </CardActions>
     </Card>
@@ -180,14 +167,12 @@ export default function Design() {
         className="flex flex-col justify-center items-start w-full max-w-4xl border-gray-200 dark:border-gray-700 mx-auto pb-16">
         <div className="flex flex-col-reverse sm:flex-row items-start">
           <div className="flex flex-col pr-8">
-            <Typography
-              variant="h1"
-              className="font-bold text-3xl md:text-4xl tracking-tight mb-1 text-black dark:text-white">
+            <h1 className="font-bold text-3xl md:text-4xl tracking-tight mb-3 text-black dark:text-white">
               デザイン
-            </Typography>
-            <Typography variant="body1" className="text-gray-400 mb-10">
+            </h1>
+            <p className="text-gray-400 mb-10">
               私がデザインした、サービス・プロダクトを記載しています。
-            </Typography>
+            </p>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-6">{designs}</div>
@@ -198,7 +183,7 @@ export default function Design() {
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Card className="w-4/5 h-4/5 absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 p-5 pt-10 pb-10 overflow-y-scroll">
+        <Card className="w-4/5 h-4/5 absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 p-5 pt-10 pb-10 !overflow-y-scroll">
           <CardMedia
             className="w-full object-cover"
             component="img"

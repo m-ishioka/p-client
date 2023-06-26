@@ -1,18 +1,19 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import Typography from '@mui/material/Typography'
 import dayjs from 'dayjs'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { NextPage } from 'next'
+import { useEffect, useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Treemap } from 'recharts'
 
 import { Project, ProcessType } from '@api/services/entpb_pb'
 import { PROJECT_TREE_MAP } from '@constants/project'
+import { useElementsResizeObserver } from '@hooks/useElementsResizeObserver'
 import { useProcessType } from '@hooks/useProcessType'
 import { useProject } from '@hooks/useProject'
 
-import Container from '../components/Container'
+import { Container } from '../components/Container'
 
 export type OutOfMessage<
   T extends {
@@ -33,7 +34,7 @@ export type OutOfMessage<
   | 'getType'
 >
 
-function ListCard({
+const ListCard = ({
   IDKey,
   name,
   startDate,
@@ -46,7 +47,7 @@ function ListCard({
   processTypeList,
 }: OutOfMessage<Project> & {
   processTypeList: OutOfMessage<ProcessType>[]
-}) {
+}) => {
   const processResult = useMemo(() => {
     const includes = processTypes.map(({ id }) => id)
     return (
@@ -76,9 +77,7 @@ function ListCard({
       className="w-full mb-10 dark:bg-transparent dark:border-white dark:border dark:shadow-none dark:text-gray-200">
       <CardContent className="m-5 w-100">
         <div className="flex items-center mt-3">
-          <Typography className="text-3xl " variant="h3" component="div">
-            {name}
-          </Typography>
+          <h3 className="text-3xl">{name}</h3>
         </div>
         <span className="m-3" />
         <Table className="card-table border-t border-l border-r max-w-4xl w-full table-fixed break-all whitespace-pre-wrap">
@@ -193,28 +192,14 @@ function ListCard({
   )
 }
 
-const useResizeObserver = (elements: any, callback: any) => {
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver((entries) => {
-      callback(entries)
-    })
-
-    for (const elem of elements) {
-      elem.current && resizeObserver.observe(elem.current)
-    }
-
-    return () => resizeObserver.disconnect()
-  }, [])
-}
-
-export default function _Project() {
+const ProjectPage: NextPage = () => {
   const { processTypeList, fetchProcessTypeList } = useProcessType()
   const { projectList, fetchProjectList } = useProject()
+  const { ref, width } = useElementsResizeObserver()
   useEffect(() => {
     fetchProcessTypeList()
     fetchProjectList()
   }, [])
-
   const list = useMemo(() => {
     const projectLength = projectList?.length
     const _list = []
@@ -228,19 +213,8 @@ export default function _Project() {
         />
       )
     }
-
     return _list
   }, [projectList, projectList])
-
-  const [width, setWidth] = useState(0)
-  const ref = useRef(null)
-
-  const handleResize = (entries: any) => {
-    const width = entries[0].contentRect.width
-    setWidth(Math.floor(width))
-  }
-
-  useResizeObserver([ref], handleResize)
 
   return (
     <Container>
@@ -249,17 +223,12 @@ export default function _Project() {
         className="flex flex-col justify-center items-start max-w-4xl border-gray-200 dark:border-gray-700 mx-auto pb-16">
         <div className="flex flex-col-reverse sm:flex-row items-start">
           <div className="flex flex-col pr-8">
-            <Typography
-              variant="h1"
-              className="font-bold text-4xl md:text-4xl tracking-tight mb-1 text-black dark:text-white">
+            <h1 className="font-bold text-4xl md:text-4xl tracking-tight mb-3 text-black dark:text-white">
               プロジェクト
-            </Typography>
-            <Typography
-              variant="body1"
-              className="mb-10 text-gray-400"
-              color="text.secondary">
+            </h1>
+            <p className="mb-10 text-gray-400">
               経験した主なプロジェクト内容を載せています。
-            </Typography>
+            </p>
           </div>
         </div>
         <Treemap
@@ -274,9 +243,6 @@ export default function _Project() {
             const targetEl = document.getElementById(e?.key)
             targetEl?.scrollIntoView({ behavior: 'smooth' })
           }}
-          // type="nest"
-          // fill="#20A4F3"
-          // stroke="#ffffff"
         />
         <span className="h-16" />
         {list}
@@ -285,3 +251,5 @@ export default function _Project() {
     </Container>
   )
 }
+
+export default ProjectPage

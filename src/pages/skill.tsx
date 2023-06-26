@@ -1,17 +1,18 @@
 import { Star, StarBorder } from '@mui/icons-material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import Typography from '@mui/material/Typography'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { NextPage } from 'next'
+import { useEffect, useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Treemap } from 'recharts'
 
 import { Skill, SkillType } from '@api/services/entpb_pb'
 import { SKILL_TREE_MAP } from '@constants/skill'
+import { useElementsResizeObserver } from '@hooks/useElementsResizeObserver'
 import { useSkill } from '@hooks/useSkill'
 import { useSkillType } from '@hooks/useSkillType'
 
-import Container from '../components/Container'
+import { Container } from '../components/Container'
 
 import { OutOfMessage } from './project'
 
@@ -52,30 +53,20 @@ function SkillCard({
       <CardContent>
         <div className="flex items-center mt-3">
           <i className={`${iconName} colored text-4xl mr-3 ml-1`} />
-          <Typography className="text-4xl " variant="h3" component="div">
-            {name}
-          </Typography>
+          <h1 className="text-4xl">{name}</h1>
         </div>
         <span className="m-3" />
         <div className="flex items-center mb-2">
-          <Typography variant="body2" className="mr-2">
-            習熟度
-          </Typography>
+          <p className="mr-2">習熟度</p>
           <div className="flex">{levelCount}</div>
         </div>
         <div className="flex items-center mb-2">
-          <Typography variant="body2" className="mr-2">
-            経験年数
-          </Typography>
-          <Typography variant="body2">{_experience}</Typography>
+          <p className="mr-2">経験年数</p>
+          <p>{_experience}</p>
         </div>
         <div className="flex items-center mb-2">
-          <Typography variant="body2" className="mr-2">
-            使用したプロジェクト
-          </Typography>
-          <Typography variant="body2">
-            {projects?.map(({ name }) => name)?.join(', ')}
-          </Typography>
+          <p className="mr-2">使用したプロジェクト</p>
+          <p>{projects?.map(({ name }) => name)?.join(', ')}</p>
         </div>
         <div className="markdown-body p-5">
           <ReactMarkdown unwrapDisallowed={true}>
@@ -87,73 +78,49 @@ function SkillCard({
   )
 }
 
-const useResizeObserver = (elements: any, callback: any) => {
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver((entries) => {
-      callback(entries)
-    })
-
-    for (const elem of elements) {
-      elem.current && resizeObserver.observe(elem.current)
-    }
-
-    return () => resizeObserver.disconnect()
-  }, [])
-}
-
-export default function _Skill() {
+const SkillList = () => {
   const { skillTypeList, fetchSkillTypeList } = useSkillType()
   const { skillList, fetchSkillList } = useSkill()
   useEffect(() => {
     fetchSkillTypeList()
     fetchSkillList()
   }, [])
-  const skills = useMemo(() => {
-    const _skills = []
-    const skillLength = skillList.length
-    for (let index = 0; index < skillLength; index++) {
-      const skill = skillList[index]
-      _skills.push(
-        <SkillCard
-          key={index.toString()}
-          {...skill}
-          skillTypeList={skillTypeList}
-        />
-      )
-    }
 
-    return _skills
-  }, [skillList, skillTypeList])
-
-  const [width, setWidth] = useState(0)
-  const ref = useRef(null)
-
-  const handleResize = (entries: any) => {
-    const width = entries[0].contentRect.width
-    setWidth(Math.floor(width))
+  const _skills = []
+  const skillLength = skillList.length
+  for (let index = 0; index < skillLength; index++) {
+    const skill = skillList[index]
+    _skills.push(
+      <SkillCard
+        key={index.toString()}
+        {...skill}
+        skillTypeList={skillTypeList}
+      />
+    )
   }
 
-  useResizeObserver([ref], handleResize)
+  return <>{_skills}</>
+}
+
+const SkillPage: NextPage = () => {
+  const { ref, width } = useElementsResizeObserver()
 
   return (
-    // <Suspense fallback={null}>
     <Container>
       <div
         ref={ref}
         className="flex flex-col justify-center items-start w-full max-w-4xl border-gray-200 dark:border-gray-700 mx-auto pb-16">
         <div className="flex flex-col-reverse sm:flex-row items-start">
           <div className="flex flex-col pr-8">
-            <Typography
-              variant="h1"
-              className="font-bold text-3xl md:text-4xl tracking-tight mb-1 text-black dark:text-gray-200">
+            <h1 className="font-bold text-3xl md:text-4xl tracking-tight mb-3 text-black dark:text-gray-200">
               スキルセット
-            </Typography>
-            <Typography variant="body1" className="mb-10 text-gray-400">
+            </h1>
+            <p className="mb-10 text-gray-400">
               自身が経験した、プロジェクトや個人プロジェクトで獲得したスキルセットを記載しています。
               この技術を採用（業務で利用）した理由。
               私が考えるこの技術を使う上でのメリット・デメリット（複数の技術と比較できるとベスト）
               この技術で抱えている課題と解決へのソリューション
-            </Typography>
+            </p>
           </div>
         </div>
         <Treemap
@@ -168,15 +135,13 @@ export default function _Skill() {
             const targetEl = document.getElementById(e?.key)
             targetEl?.scrollIntoView({ behavior: 'smooth' })
           }}
-          // type="nest"
-          // fill="#000"
-          // stroke="#ffffff"
         />
         <span className="h-16" />
-        {skills}
+        <SkillList />
         <span className="h-16" />
       </div>
     </Container>
-    // </Suspense>
   )
 }
+
+export default SkillPage

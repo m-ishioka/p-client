@@ -1,0 +1,27 @@
+FROM node:16.15.0-alpine
+
+COPY --from=bufbuild/buf:latest /usr/local/bin/buf /usr/local/bin/buf
+
+ENV HOME=/app
+ENV APP_HOME="$HOME"
+
+WORKDIR $APP_HOME
+
+EXPOSE 3001
+
+# node config
+COPY package*.json ./
+COPY .npmrc ./
+
+RUN chown -R node:node .
+RUN mkdir $APP_HOME/node_modules
+RUN chown -R node:node $APP_HOME/node_modules
+
+RUN echo "WORKDIR is $WORKDIR . HOME is $HOME . LANG is $LANG ." && npm config list
+
+ENV PATH $PATH:/usr/local/bin/buf
+
+RUN NODE_AUTH_TOKEN=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 npm install
+
+# buf runtime config
+COPY buf.gen.yaml ./

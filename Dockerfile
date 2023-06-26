@@ -14,6 +14,7 @@ EXPOSE 3001
 
 COPY package*.json ./
 COPY .npmrc ./
+COPY env/ ./env/
 
 RUN chown -R node:node .
 RUN mkdir $APP_HOME/node_modules
@@ -38,7 +39,7 @@ ENV NODE_ENV=development
 FROM dev as test
 ENV NODE_ENV=test
 
-RUN NODE_AUTH_TOKEN=$__NODE_AUTH_TOKEN npm install
+RUN NODE_AUTH_TOKEN=$__NODE_AUTH_TOKEN npm ci
 
 
 ###############
@@ -64,7 +65,7 @@ COPY --from=build /$APP_HOME/.next ./.next
 COPY --from=build /$APP_HOME/next.config.js ./next.config.js
 COPY --from=build /$APP_HOME/public ./public
 
-RUN NODE_AUTH_TOKEN=$__NODE_AUTH_TOKEN npm install --only=production \
+RUN NODE_AUTH_TOKEN=$__NODE_AUTH_TOKEN npm ci --only=production \
     && npm cache clean --force
 
 USER node

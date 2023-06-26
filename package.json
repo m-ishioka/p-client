@@ -2,7 +2,7 @@
   "name": "app",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
+  "proxy": "https://p-ishioka.com",
   "scripts": {
     "dev": "run-p dev:*",
     "dev:next": "APP_ENV=development NODE_OPTIONS='--inspect' next dev -p 3001",
