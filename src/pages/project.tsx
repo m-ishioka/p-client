@@ -62,7 +62,6 @@ const ListCard = ({
       </>
     )
   }, [processTypeList, processTypes])
-
   const _startDate = useMemo(
     () => dayjs(startDate?.toJson() as unknown as Date),
     [startDate]
@@ -71,6 +70,7 @@ const ListCard = ({
     () => dayjs(endDate?.toJson() as unknown as Date),
     [endDate]
   )
+
   return (
     <Card
       id={IDKey}
@@ -192,29 +192,30 @@ const ListCard = ({
   )
 }
 
-const ProjectPage: NextPage = () => {
+const ProjectList = () => {
   const { processTypeList, fetchProcessTypeList } = useProcessType()
   const { projectList, fetchProjectList } = useProject()
-  const { ref, width } = useElementsResizeObserver()
   useEffect(() => {
     fetchProcessTypeList()
     fetchProjectList()
   }, [])
-  const list = useMemo(() => {
-    const projectLength = projectList?.length
-    const _list = []
-    for (let index = 0; index < projectLength; index++) {
-      const project = projectList[index]
-      _list.push(
-        <ListCard
-          key={index.toString()}
-          {...project}
-          processTypeList={processTypeList}
-        />
-      )
-    }
-    return _list
-  }, [projectList, projectList])
+  const projectLength = projectList?.length
+  const _list = []
+  for (let index = 0; index < projectLength; index++) {
+    const project = projectList[index]
+    _list.push(
+      <ListCard
+        key={index.toString()}
+        {...project}
+        processTypeList={processTypeList}
+      />
+    )
+  }
+  return <>{_list}</>
+}
+
+const ProjectPage: NextPage = () => {
+  const { ref, width } = useElementsResizeObserver()
 
   return (
     <Container>
@@ -245,7 +246,7 @@ const ProjectPage: NextPage = () => {
           }}
         />
         <span className="h-16" />
-        {list}
+        <ProjectList />
         <span className="h-16" />
       </div>
     </Container>

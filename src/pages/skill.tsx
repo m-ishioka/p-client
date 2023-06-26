@@ -16,7 +16,7 @@ import { Container } from '../components/Container'
 
 import { OutOfMessage } from './project'
 
-function SkillCard({
+const SkillCard = ({
   IDKey,
   iconName,
   name,
@@ -26,10 +26,9 @@ function SkillCard({
   description,
 }: OutOfMessage<Skill> & {
   skillTypeList: OutOfMessage<SkillType>[]
-}) {
+}) => {
   const levelCount = useMemo(() => {
     const _count = []
-
     for (let index = 1; index < 6; index++) {
       if (index <= level) {
         _count.push(<Star key={index} />)
@@ -39,7 +38,6 @@ function SkillCard({
     }
     return _count
   }, [])
-
   const _experience = useMemo(() => {
     const _year = Math.floor(experience)
     const _month = (experience * 12) % 12
