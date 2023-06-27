@@ -131,20 +131,6 @@ const ListCard = ({
             </TableRow>
             <TableRow>
               <TableCell className="border-r font-bold" colSpan={2}>
-                サーバーOS
-              </TableCell>
-              <TableCell colSpan={8}>
-                {skills
-                  .filter(
-                    ({ skillType }) =>
-                      ((skillType?.id.toString() ?? '0') as unknown) === '3'
-                  )
-                  .map(({ name }) => name)
-                  ?.join(' ,  ')}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="border-r font-bold" colSpan={2}>
                 FW・MW ツール 等
               </TableCell>
               <TableCell colSpan={8}>
@@ -196,8 +182,8 @@ const ProjectList = () => {
   const { processTypeList, fetchProcessTypeList } = useProcessType()
   const { projectList, fetchProjectList } = useProject()
   useEffect(() => {
-    fetchProcessTypeList()
-    fetchProjectList()
+    void fetchProcessTypeList()
+    void fetchProjectList()
   }, [])
   const projectLength = projectList?.length
   const _list = []
@@ -241,7 +227,7 @@ const ProjectPage: NextPage = () => {
           dataKey="size"
           aspectRatio={5 / 4}
           onClick={(e) => {
-            const targetEl = document.getElementById(e?.key)
+            const targetEl = document.getElementById(e?.key as string)
             targetEl?.scrollIntoView({ behavior: 'smooth' })
           }}
         />

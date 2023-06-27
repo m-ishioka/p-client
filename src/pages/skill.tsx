@@ -3,7 +3,6 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import { NextPage } from 'next'
 import { useEffect, useMemo } from 'react'
-import ReactMarkdown from 'react-markdown'
 import { Treemap } from 'recharts'
 
 import { Skill, SkillType } from '@api/services/entpb_pb'
@@ -11,6 +10,7 @@ import { SKILL_TREE_MAP } from '@constants/skill'
 import { useElementsResizeObserver } from '@hooks/useElementsResizeObserver'
 import { useSkill } from '@hooks/useSkill'
 import { useSkillType } from '@hooks/useSkillType'
+import { paragraphStrings } from '@utilities/helper'
 
 import { Container } from '../components/Container'
 
@@ -39,38 +39,41 @@ const SkillCard = ({
     return _count
   }, [])
   const _experience = useMemo(() => {
-    const _year = Math.floor(experience)
-    const _month = (experience * 12) % 12
+    const num = Number(experience.toFixed(1))
+    const _year = Math.floor(num)
+    const _month = Math.ceil((num * 10) % 10)
     return `約${_year ? `${_year}年` : ''}${_month ? `${_month}ヶ月` : ''}`
   }, [])
 
   return (
     <Card
       id={IDKey}
-      className="w-full mb-10 dark:bg-transparent dark:border-white dark:border dark:shadow-none dark:text-gray-200">
+      className="dark:bg-transparent dark:border-white dark:border dark:shadow-none dark:text-gray-200">
       <CardContent>
         <div className="flex items-center mt-3">
-          <i className={`${iconName} colored text-4xl mr-3 ml-1`} />
-          <h1 className="text-4xl">{name}</h1>
+          <i className={`${iconName} colored text-3xl mr-3 ml-1`} />
+          <h1 className="text-lg">{name}</h1>
         </div>
         <span className="m-3" />
         <div className="flex items-center mb-2">
-          <p className="mr-2">習熟度</p>
+          <p className="mr-2 text-md">習熟度</p>
           <div className="flex">{levelCount}</div>
         </div>
         <div className="flex items-center mb-2">
-          <p className="mr-2">経験年数</p>
-          <p>{_experience}</p>
+          <p className="mr-2 text-md">経験年数</p>
+          <p className="text-md">{_experience}</p>
         </div>
-        <div className="flex items-center mb-2">
-          <p className="mr-2">使用したプロジェクト</p>
-          <p>{projects?.map(({ name }) => name)?.join(', ')}</p>
+        <div className="items-center mb-2">
+          <p className="mb-2">使用したプロジェクト</p>
+          <p className="block text-sm leading-6">
+            {paragraphStrings(projects?.map(({ name }) => name))}
+          </p>
         </div>
-        <div className="markdown-body p-5">
+        {/* <div className="markdown-body p-5">
           <ReactMarkdown unwrapDisallowed={true}>
             {Buffer.from(description).toString()}
           </ReactMarkdown>
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   )
@@ -80,8 +83,8 @@ const SkillList = () => {
   const { skillTypeList, fetchSkillTypeList } = useSkillType()
   const { skillList, fetchSkillList } = useSkill()
   useEffect(() => {
-    fetchSkillTypeList()
-    fetchSkillList()
+    void fetchSkillTypeList()
+    void fetchSkillList()
   }, [])
 
   const _skills = []
@@ -97,7 +100,11 @@ const SkillList = () => {
     )
   }
 
-  return <>{_skills}</>
+  return (
+    <div className="w-full grid grid-cols-1 gap-2 md:grid-cols-3">
+      {_skills}
+    </div>
+  )
 }
 
 const SkillPage: NextPage = () => {
@@ -130,7 +137,7 @@ const SkillPage: NextPage = () => {
           dataKey="size"
           aspectRatio={5 / 4}
           onClick={(e) => {
-            const targetEl = document.getElementById(e?.key)
+            const targetEl = document.getElementById(e?.key as string)
             targetEl?.scrollIntoView({ behavior: 'smooth' })
           }}
         />

@@ -25,19 +25,20 @@ RUN echo "WORKDIR is $WORKDIR . HOME is $HOME . LANG is $LANG ." && npm config l
 ARG _NODE_AUTH_TOKEN
 ENV __NODE_AUTH_TOKEN ${_NODE_AUTH_TOKEN}
 
+ARG _ENV
+ENV __ENV ${_ENV}
+
 
 ###############
 #     dev     #
 ###############
 FROM base as dev
-ENV NODE_ENV=development
 
 
 ###############
 #     test    #
 ###############
 FROM dev as test
-ENV NODE_ENV=test
 
 RUN NODE_AUTH_TOKEN=$__NODE_AUTH_TOKEN npm ci
 
@@ -47,11 +48,9 @@ RUN NODE_AUTH_TOKEN=$__NODE_AUTH_TOKEN npm ci
 ###############
 FROM test as build
 
-ARG _ENV="develop"
-
 COPY --chown=node . .
 
-RUN npm run build:${_ENV}
+RUN npm run build:$__ENV
 
 
 
@@ -59,7 +58,6 @@ RUN npm run build:${_ENV}
 #    prod     #
 ###############
 FROM base as prod
-ENV NODE_ENV=production
 
 COPY --from=build /$APP_HOME/.next ./.next
 COPY --from=build /$APP_HOME/next.config.js ./next.config.js

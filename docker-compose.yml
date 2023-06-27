@@ -23,7 +23,7 @@ services:
     volumes:
       - ./:/app:cached
       - buf_node_modules_volume:/app/node_modules
-    tty: true
+    tty: false
 volumes:
   node_modules_volume:
   buf_node_modules_volume:

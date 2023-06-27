@@ -8,7 +8,6 @@
       "@hooks*": ["src/hooks/*"],
       "@styles*": ["src/styles/*"],
       "@utilities*": ["src/utilities/*"],
-      "@viewmodels*": ["src/viewmodels/*"],
       "@constants*": ["src/constants/*"],
       "@types*": ["types/*"]
     },
@@ -30,5 +29,5 @@
     "emitDecoratorMetadata": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "env/**"]
 }

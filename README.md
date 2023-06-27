@@ -22,7 +22,6 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 │ │ ├ _app.tsx
 │ │ ├ _document.tsx
 │ │ └ index.tsx
-│ ├ viewmodels ... ビューモデル(pages単位)
 │ ├ hooks ... カスタムフック
 │ ├ constants ... 定数
 │ ├ utilities ... 便利関数

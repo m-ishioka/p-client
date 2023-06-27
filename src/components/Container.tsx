@@ -43,7 +43,7 @@ const NavItem = ({
 export const Container = (
   props: PropsWithChildren<
     Partial<{
-      title: HTMLTitleElement['children'] | string
+      title: MetaHTMLAttributes<HTMLMetaElement>['content']
       image: MetaHTMLAttributes<HTMLMetaElement>['content']
       date: MetaHTMLAttributes<HTMLMetaElement>['content']
     }>

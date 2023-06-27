@@ -1,43 +1,35 @@
 {
-  "env": {
-    "es6": true,
-    "es2021": true
-  },
+  "plugins": ["import", "unused-imports", "@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 13, // 2022
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "sourceType": "module"
+    "project": "./tsconfig.json"
   },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  },
-  "plugins": ["import", "unused-imports"],
   "extends": [
+    "next",
     "next/core-web-vitals",
     "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:import/recommended",
     "plugin:import/typescript"
   ],
   "rules": {
-    "react/display-name": "off",
-    "react/prop-types": "off",
+    "react/display-name": ["off"],
+    "react/prop-types": ["off"],
     "semi": ["error", "never", { "beforeStatementContinuationChars": "never" }],
     "semi-spacing": ["error", { "after": true, "before": false }],
     "semi-style": ["error", "first"],
-    "no-extra-semi": "error",
-    "no-unexpected-multiline": "error",
-    "no-unreachable": "error",
-    "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/no-namespace": "off",
-    "@typescript-eslint/no-empty-function": "off",
-    "no-duplicate-case": "off",
-    "no-useless-escape": "warn",
-    "@typescript-eslint/no-unused-vars": "off",
-    "unused-imports/no-unused-imports": "error",
+    "no-extra-semi": ["error"],
+    "no-unexpected-multiline": ["error"],
+    "no-unreachable": ["error"],
+    "@typescript-eslint/no-empty-interface": ["off"],
+    "@typescript-eslint/no-namespace": ["off"],
+    "@typescript-eslint/no-empty-function": ["off"],
+    "no-duplicate-case": ["off"],
+    "no-useless-escape": ["warn"],
+    "@typescript-eslint/no-unused-vars": ["off"],
+    "unused-imports/no-unused-imports": ["error"],
+    "@typescript-eslint/no-unsafe-assignment": ["off"],
     "import/order": [
       "warn",
       {
@@ -69,5 +61,6 @@
       }
     ],
     "import/resolver": 0
-  }
+  },
+  "ignorePatterns": ["next.config.js", "env/*.js"]
 }

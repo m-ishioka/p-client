@@ -1,10 +1,8 @@
-loadEnv(process.env.APP_ENV)
-require('dotenv').config({ path: `./env/env.${process.env.ENVIRONMENT}.js` })
-
 /**
  * @param {string} appEnv
  */
 function loadEnv(appEnv = 'local') {
+  console.log('appEnv', appEnv)
   const env = {
     ...require(`./env/env.${appEnv}.js`),
 
@@ -15,6 +13,8 @@ function loadEnv(appEnv = 'local') {
     process.env[key] = value
   })
 }
+
+loadEnv(process.env.APP_ENV)
 
 /** @type {import('next').NextConfig} */
 const path = require('path')
@@ -56,7 +56,6 @@ const nextConfig = {
       '@hooks': path.join(__dirname, 'src/hooks/*'),
       '@styles': path.join(__dirname, 'src/styles/*'),
       '@utilities': path.join(__dirname, 'src/utilities/*'),
-      '@viewmodels': path.join(__dirname, 'src/viewmodels/*'),
       '@constants': path.join(__dirname, 'src/constants/*'),
       '@types': path.join(__dirname, 'types/*'),
     }

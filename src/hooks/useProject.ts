@@ -11,7 +11,7 @@ export const useProject = () => {
         view: ListProjectRequest_View.WITH_EDGE_IDS,
       })
       .then((res) => {
-        return res?.projectList ?? []
+        return res?.projectList.reverse() ?? []
       })
     setProjectList(result)
   }, [])
