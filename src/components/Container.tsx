@@ -96,9 +96,9 @@ export const Container = (
           <div className="ml-[-0.60rem]">
             <MobileMenu />
             <NavItem href="/" text="私について" />
-            <NavItem href="/skill" text="スキル" />
-            <NavItem href="/project" text="プロジェクト" />
-            <NavItem href="/design" text="デザイン" />
+            <NavItem href="/skill/" text="スキル" />
+            <NavItem href="/project/" text="プロジェクト" />
+            <NavItem href="/design/" text="デザイン" />
           </div>
           <button
             aria-label="Toggle Dark Mode"
