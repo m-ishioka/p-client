@@ -30,10 +30,6 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 └ types ... 型定義ファイル
 ```
 
-状態の定義
-state（状態）は viewmodel 及び pages 単位で一つのものを整形し、viewmodel に保持
-viewmodel だけが statefull な状態を維持し、他の層は stateless な状態となる
-
 ## Getting Started
 
 First, run the development server:
