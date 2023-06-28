@@ -88,7 +88,7 @@ const Home: NextPage = () => {
           </ul>
           <h2>このサイトで使用している技術スタック</h2>
           <p>
-            Typescript・React・Nextjs・go・grpc-web・mysql・docker・Cloud Run
+            Typescript・React・Nextjs・go・grpc-web・mysql・docker・Cloud Run.
           </p>
         </div>
         <span className="h-16" />
